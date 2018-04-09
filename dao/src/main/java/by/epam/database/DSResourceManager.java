@@ -4,7 +4,7 @@ import java.util.ResourceBundle;
 
 public class DSResourceManager {
 
-    private static final ResourceBundle resource = ResourceBundle.getBundle("database.properties");
+    private static final ResourceBundle resource = ResourceBundle.getBundle("database");
 
 
     public DSResourceManager() {
