@@ -1,9 +1,9 @@
 package by.epam.entity;
 
-import by.epam.annotation.Column;
-import by.epam.annotation.Entity;
-import by.epam.annotation.Id;
-import by.epam.annotation.Table;
+import by.epam.processor.annotation.Column;
+import by.epam.processor.annotation.Entity;
+import by.epam.processor.annotation.Id;
+import by.epam.processor.annotation.Table;
 
 import java.util.Objects;
 
