@@ -88,16 +88,29 @@ public class QueryBuilder {
         Object id = ReflectionUtil.invokeGetter(entity, idColumnFieldName);
 
         StringBuilder query = new StringBuilder("update ").append(tableName).append(" set ");
-
-        columnsValues.entrySet()
+        List<String> updateValues = columnsValues.entrySet()
                 .stream()
-                .map(cv -> query.append(cv.getKey()).append(" = ").append(cv.getValue()).append(","))
-                .close();
+                .map(cv -> new StringBuilder(cv.getKey()).append(" = ").append(cv.getValue()).toString())
+                .collect(Collectors.toList());
+
+        String values = String.join(", ", updateValues);
 
 
-        query.setLength(query.length() - 1);
-        return query.append(" where ").append(idColumnName).append(" = ").append(id).append(";").toString();
+        return query.append(values).append(" where ").append(idColumnName).append(" = ").append(id).append(";").toString();
 
+    }
+
+
+    public static String deleteQuery(Class<?> clazz, Object id) throws DaoException {
+        EntityMeta entityMeta = Cache.ENTITY_META_DATA_CACHE.get(clazz);
+        Assert.notNull(entityMeta, "Entity: " + clazz + " not found");
+        String tableName = entityMeta.getTableName();
+        String idColumnName = entityMeta.getIdColumnName();
+
+        return new StringBuilder("delete from ")
+                .append(tableName).append(" where ")
+                .append(idColumnName)
+                .append(" = ").append(id).toString();
     }
 
 

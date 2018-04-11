@@ -7,10 +7,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DSConnection {
+public class DSConnector {
+
+    private static final DSConnector INSTANCE = new DSConnector();
 
 
-    public DSConnection() {
+    private DSConnector() {
     }
 
 
@@ -23,5 +25,9 @@ public class DSConnection {
             throw new DaoException("Error while creating connection ", e);
         }
 
+    }
+
+    public static DSConnector getINSTANCE() {
+        return INSTANCE;
     }
 }

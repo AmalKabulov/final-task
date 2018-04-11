@@ -3,7 +3,7 @@ package by.epam.dao;
 import by.epam.processor.Cache;
 import by.epam.processor.QueryBuilder;
 import by.epam.processor.annotation.Repository;
-import by.epam.processor.database.DSConnection;
+import by.epam.processor.database.DSConnector;
 import by.epam.processor.database.DefaultConnection;
 import by.epam.entity.BaseEntity;
 import by.epam.exception.DaoException;
@@ -24,40 +24,40 @@ public abstract class BaseDaoImpl<T, E extends BaseEntity> implements BaseDao<T,
 
     private ResultSetParserManager resultSetParserManager = ResultSetParserManager.getINSTANCE();
 
-    public List<E> findAll() throws DaoException, SQLException {
+    public List<E> findAll() throws DaoException {
 
         List<E> objects = new ArrayList<>();
-        DSConnection dsConnection = new DSConnection();
-        DefaultConnection connection = dsConnection.getConnection();
+        DSConnector dsConnector = new DSConnector();
+        DefaultConnection connection = dsConnector.getConnection();
 
+        Class<?> entityClass = ReflectionUtil.getGenericParameterClass(getClass(), 1);
+        System.out.println("Class: " + entityClass);
+        String query = QueryBuilder.findAllQuery(entityClass);
 
-        Class<?> aClass = ReflectionUtil.getGenericParameterClass(getClass(), 1);
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                BaseEntity entity = resultSetParserManager.parse(entityClass, resultSet);
+                objects.add((E) entity);
+            }
 
-
-        System.out.println("Class: " + aClass);
-        String query = QueryBuilder.findAllQuery(aClass);
-
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-        ResultSet resultSet = preparedStatement.executeQuery();
-
-
-        while (resultSet.next()) {
-            BaseEntity entity = resultSetParserManager.parse(aClass, resultSet);
-            objects.add((E) entity);
+            System.out.println("query: " + query);
+            Assert.notEmpty(objects, "Nothing was found");
+            return objects;
+        } catch (SQLException e) {
+            throw new DaoException("");
         }
 
-
-        System.out.println("query: " + query);
-        return objects;
     }
 
 
-    protected E findOne(T id) throws DaoException, SQLException {
+    public E findOne(T id) throws DaoException {
         BaseEntity entity = null;
 
-        DSConnection dsConnection = new DSConnection();
-        DefaultConnection connection = dsConnection.getConnection();
+        DSConnector dsConnector = new DSConnector();
+        DefaultConnection connection = dsConnector.getConnection();
 
         Class<?> aClass = ReflectionUtil.getGenericParameterClass(getClass(), 1);
 
@@ -67,25 +67,45 @@ public abstract class BaseDaoImpl<T, E extends BaseEntity> implements BaseDao<T,
 
         System.out.println(query);
 
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-        ResultSet resultSet = preparedStatement.executeQuery();
-
-        while (resultSet.next()) {
-            entity = resultSetParserManager.parse(aClass, resultSet);
+            while (resultSet.next()) {
+                entity = resultSetParserManager.parse(aClass, resultSet);
+            }
+            return (E) entity;
+        } catch (SQLException e) {
+            throw new DaoException("");
         }
 
 
-        return (E) entity;
     }
 
-    protected void delete(T id) {
+    public void delete(T id) throws DaoException {
+
+        DSConnector dsConnector = new DSConnector();
+        DefaultConnection connection = dsConnector.getConnection();
+
+        Class<?> entityClass = ReflectionUtil.getGenericParameterClass(getClass(), 1);
+        String query = QueryBuilder.deleteQuery(entityClass, id);
+        System.out.println(query);
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            int result = preparedStatement.executeUpdate();
+            Assert.notZero(result, "Deleting entity: " + entityClass + " failed");
+        } catch (SQLException e) {
+            throw new DaoException("");
+        }
+
 
     }
 
-    protected E save(E entity) throws DaoException, SQLException {
-        DSConnection dsConnection = new DSConnection();
-        DefaultConnection connection = dsConnection.getConnection();
+    public E save(E entity) throws DaoException {
+        DSConnector dsConnector = new DSConnector();
+        DefaultConnection connection = dsConnector.getConnection();
 
         String query = QueryBuilder.insertQuery(entity);
 
@@ -93,35 +113,47 @@ public abstract class BaseDaoImpl<T, E extends BaseEntity> implements BaseDao<T,
 
         EntityMeta entityMeta = Cache.ENTITY_META_DATA_CACHE.get(entity.getClass());
         Assert.notNull(entityMeta, "entity: " + entity + " not found");
-
         String idColumnFieldName = entityMeta.getIdColumnFieldName();
-        PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-        int result = preparedStatement.executeUpdate();
-        Assert.notZero(result, "inserting entity: " + entity + " failed");
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            int result = preparedStatement.executeUpdate();
+            Assert.notZero(result, "inserting entity: " + entity + " failed");
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            Assert.isTrue(generatedKeys.next(), "inserting entity: " + entity + " failed. No id obtained");
+            //TODO может быть не лонг
+            Long id = generatedKeys.getLong(1);
+            ReflectionUtil.invokeSetter(entity, idColumnFieldName, id);
+            return entity;
 
-        ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-        Assert.isTrue(generatedKeys.next(), "inserting entity: " + entity + " failed. No id obtained");
+        } catch (SQLException e) {
+            throw new DaoException("");
+        }
 
-        Long id = generatedKeys.getLong(1);
-
-        ReflectionUtil.invokeSetter(entity, idColumnFieldName, id);
-        return entity;
     }
 
-    protected E update(E entity) throws DaoException, SQLException {
-        DSConnection dsConnection = new DSConnection();
-        DefaultConnection connection = dsConnection.getConnection();
+    public E update(E entity) throws DaoException {
+        DSConnector dsConnector = new DSConnector();
+        DefaultConnection connection = dsConnector.getConnection();
         String query = QueryBuilder.updateQuery(entity);
         System.out.println(query);
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
-        int updatedRows = preparedStatement.executeUpdate();
-        Assert.notZero(updatedRows, "updating entity: " + entity + " failed");
-        return entity;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            int updatedRows = preparedStatement.executeUpdate();
+            Assert.notZero(updatedRows, "updating entity: " + entity + " failed");
+            return entity;
+
+        } catch (SQLException e) {
+
+            throw new DaoException("");
+        }
+
+
     }
 
 
-    protected List<E> findByQuery(String query) throws SQLException, ClassNotFoundException {
+    protected List<E> findByQuery(String query) {
 
         return null;
     }

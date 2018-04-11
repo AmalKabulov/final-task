@@ -13,7 +13,7 @@ public abstract class Assert {
      * <pre class="code">Assert.isNull(value, "The value must be null");</pre>
      * @param object the object to check
      * @param message the exception message to use if the assertion fails
-     * @throws IllegalArgumentException if the object is not {@code null}
+     * @throws DaoException if the object is not {@code null}
      */
     public static void notNull(Object object, String message) throws DaoException {
         if (object == null) {
@@ -28,7 +28,7 @@ public abstract class Assert {
      * <pre class="code">Assert.notEmpty(collection, "Collection must contain elements");</pre>
      * @param collection the collection to check
      * @param message the exception message to use if the assertion fails
-     * @throws IllegalArgumentException if the collection is {@code null} or
+     * @throws DaoException if the collection is {@code null} or
      * contains no elements
      */
     public static void notEmpty(Collection<?> collection, String message) throws DaoException {
@@ -44,7 +44,7 @@ public abstract class Assert {
      * <pre class="code">Assert.notEmpty(map, "Map must contain entries");</pre>
      * @param map the map to check
      * @param message the exception message to use if the assertion fails
-     * @throws IllegalArgumentException if the map is {@code null} or contains no entries
+     * @throws DaoException if the map is {@code null} or contains no entries
      */
     public static void notEmpty(Map<?, ?> map, String message) throws DaoException {
         if (map == null || map.isEmpty()) {
@@ -66,7 +66,7 @@ public abstract class Assert {
      * <pre class="code">Assert.isTrue(i &gt; 0, "The value must be greater than zero");</pre>
      * @param expression a boolean expression
      * @param message the exception message to use if the assertion fails
-     * @throws IllegalArgumentException if {@code expression} is {@code false}
+     * @throws DaoException if {@code expression} is {@code false}
      */
     public static void isTrue(boolean expression, String message) throws DaoException {
         if (!expression) {

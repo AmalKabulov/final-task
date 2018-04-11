@@ -1,6 +1,18 @@
 package by.epam.dao;
 
 import by.epam.entity.BaseEntity;
+import by.epam.exception.DaoException;
+
+import java.util.List;
 
 public interface BaseDao <T, E extends BaseEntity> {
+    List<E> findAll() throws DaoException;
+
+    E findOne(T id) throws DaoException;
+
+    void delete(T id) throws DaoException;
+
+    E save(E entity) throws DaoException;
+
+    E update(E entity) throws DaoException;
 }

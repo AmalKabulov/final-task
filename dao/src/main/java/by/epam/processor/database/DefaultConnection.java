@@ -77,11 +77,6 @@ public class DefaultConnection implements Connection {
     }
 
 
-    public void ignoreAutoCommit() throws SQLException {
-        connection.setAutoCommit(false);
-    }
-
-
     @Override
     public boolean getAutoCommit() throws SQLException {
         return connection.getAutoCommit();
