@@ -109,8 +109,15 @@ public abstract class BaseDaoImpl<T, E extends BaseEntity> implements BaseDao<T,
         return entity;
     }
 
-    protected E update(E entity) {
-        return null;
+    protected E update(E entity) throws DaoException, SQLException {
+        DSConnection dsConnection = new DSConnection();
+        DefaultConnection connection = dsConnection.getConnection();
+        String query = QueryBuilder.updateQuery(entity);
+        System.out.println(query);
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        int updatedRows = preparedStatement.executeUpdate();
+        Assert.notZero(updatedRows, "updating entity: " + entity + " failed");
+        return entity;
     }
 
 

@@ -72,6 +72,34 @@ public class QueryBuilder {
 
     }
 
+    public static String updateQuery(Object entity) throws DaoException {
+
+        Class<?> entityClass = entity.getClass();
+        Map<String, String> columnsValues = getColumnsValues(entity);
+
+
+        String tableName = entityClass.getAnnotation(Table.class).name();
+        EntityMeta entityMeta = Cache.ENTITY_META_DATA_CACHE.get(entityClass);
+        Assert.notNull(entityMeta, "Entity: " + entityClass + " not found");
+
+        String idColumnFieldName = entityMeta.getIdColumnFieldName();
+        String idColumnName = entityMeta.getIdColumnName();
+
+        Object id = ReflectionUtil.invokeGetter(entity, idColumnFieldName);
+
+        StringBuilder query = new StringBuilder("update ").append(tableName).append(" set ");
+
+        columnsValues.entrySet()
+                .stream()
+                .map(cv -> query.append(cv.getKey()).append(" = ").append(cv.getValue()).append(","))
+                .close();
+
+
+        query.setLength(query.length() - 1);
+        return query.append(" where ").append(idColumnName).append(" = ").append(id).append(";").toString();
+
+    }
+
 
     private static Map<String, String> getColumnsValues(Object entity) {
 

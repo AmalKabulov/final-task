@@ -23,15 +23,20 @@ import java.util.List;
 //        findAll();
 
         User one = findOne(1L);
+        System.out.println(one);
 
         User user = new User();
-        user.setEmail("abcdefghij@gmail.com");
+        user.setEmail("abcde@gmail.com");
         user.setPassword("123456");
         User saved = save(user);
-
         System.out.println(saved);
 
-        System.out.println(one);
+        user.setEmail("abcdefg@gmail.com");
+        User update = update(user);
+
+        System.out.println(update);
+
+
         DSConnection dsConnection = new DSConnection();
         DefaultConnection connection = dsConnection.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement();
