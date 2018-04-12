@@ -75,7 +75,6 @@ public class ReflectionUtil {
 
     public static Object invokeSetter(Object object, String fieldName, /*Class<?> fieldType,*/ Object arg) {
         Method setter = getMethod(object.getClass(), "set" + capitalizeFirstLetter(fieldName), arg.getClass());
-        System.out.println(setter.getName());
         setter.setAccessible(true);
         return ReflectionUtil.invokeMethod(object, setter, arg);
     }

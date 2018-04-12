@@ -1,8 +1,9 @@
 package by.epam.processor.database;
 
+import by.epam.processor.CPException;
 import by.epam.processor.Cache;
-import by.epam.exception.DaoException;
-import by.epam.processor.util.Assert;
+import by.epam.dao.exception.DaoException;
+import by.epam.dao.Assert;
 import by.epam.processor.util.ClassUtil;
 
 import java.sql.*;
@@ -31,30 +32,30 @@ public class DefaultConnection implements Connection {
     * above method which uses this prepareStatement
     * */
 
-    public PreparedStatement prepareStatement() throws SQLException, DaoException {
-        String query = null;
-
-        long startTime = System.nanoTime();
-
-        StackTraceElement callerMethodInfo = ClassUtil.getCallerMethodInfo();
-
-        long endTime = System.nanoTime();
-
-        System.out.println((endTime - startTime));
-        String callerClassName = callerMethodInfo.getClassName();
-        String callerMethod = callerMethodInfo.getMethodName();
-
-        Map<String, String> stringStringMap = Cache.REPOSITORIES_META.get(callerClassName);
-        if (!Objects.equals(stringStringMap, null)) {
-            query = stringStringMap.get(callerMethod);
-        }
-
-        Assert.notNull(query, "query not found");
-
-        System.out.println(query);
-
-        return prepareStatement(query);
-    }
+//    public PreparedStatement prepareStatement() throws SQLException, DaoException {
+//        String query = null;
+//
+//        long startTime = System.nanoTime();
+//
+//        StackTraceElement callerMethodInfo = ClassUtil.getCallerMethodInfo();
+//
+//        long endTime = System.nanoTime();
+//
+//        System.out.println((endTime - startTime));
+//        String callerClassName = callerMethodInfo.getClassName();
+//        String callerMethod = callerMethodInfo.getMethodName();
+//
+//        Map<String, String> stringStringMap = Cache.REPOSITORIES_META.get(callerClassName);
+//        if (!Objects.equals(stringStringMap, null)) {
+//            query = stringStringMap.get(callerMethod);
+//        }
+//
+//        Assert.notNull(query, "query not found");
+//
+//        System.out.println(query);
+//
+//        return prepareStatement(query);
+//    }
 
     @Override
     public PreparedStatement prepareStatement(String sql) throws SQLException {
@@ -93,8 +94,17 @@ public class DefaultConnection implements Connection {
     }
 
     @Override
-    public void close() {
-//        ConnectionPool.getInstance().releaseConnection(this);
+    public void close() throws SQLException {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        try {
+            DefaultConnectionPool.getInstance().freeConnection(this);
+        } catch (CPException e) {
+            throw new SQLException("Error while working with connection pool. ", e);
+        }
+    }
+
+    public void closeDown() throws SQLException {
+        connection.close();
     }
 
     @Override

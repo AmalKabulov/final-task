@@ -1,6 +1,6 @@
 package by.epam.processor.database;
 
-import by.epam.exception.DaoException;
+import by.epam.dao.exception.DaoException;
 import by.epam.processor.util.ReflectionUtil;
 
 import java.sql.Connection;

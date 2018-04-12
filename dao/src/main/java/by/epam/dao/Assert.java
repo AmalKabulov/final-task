@@ -1,6 +1,6 @@
-package by.epam.processor.util;
+package by.epam.dao;
 
-import by.epam.exception.DaoException;
+import by.epam.dao.exception.DaoException;
 
 import java.util.Collection;
 import java.util.Map;

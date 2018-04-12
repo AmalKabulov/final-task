@@ -1,4 +1,4 @@
-package by.epam.exception;
+package by.epam.dao.exception;
 
 public class DaoException extends Exception {
     public DaoException() {

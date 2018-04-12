@@ -1,13 +1,12 @@
 package by.epam.dao;
 
+import by.epam.processor.Cache;
 import by.epam.processor.annotation.Query;
 import by.epam.processor.annotation.Repository;
-import by.epam.processor.database.DSConnector;
-import by.epam.processor.database.DefaultConnection;
 import by.epam.entity.User;
-import by.epam.exception.DaoException;
+import by.epam.dao.exception.DaoException;
+import by.epam.processor.database.DefaultConnectionPool;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -22,21 +21,21 @@ public class DaoTest extends BaseDaoImpl<Long, User> {
         all.forEach(System.out::println);
 //        findAll();
 
-        User one = findOne(4L);
+        User one = findOne(7L);
         System.out.println(one);
 
 //        User user = new User();
-//        user.setEmail("asdasd@gmail.com");
+//        user.setEmail("abc@gmail.com");
 //        user.setPassword("123456");
 //        User saved = save(user);
 //        System.out.println(saved);
 //
-//        user.setEmail("11111@gmail.com");
+//        user.setEmail("asasd67das5@gmail.com");
 //        User update = update(user);
-
+//
 //        System.out.println(update);
-
-        delete(3L);
+//
+//        delete(7L);
 
 
 //        DSConnector dsConnector = new DSConnector();
@@ -46,6 +45,9 @@ public class DaoTest extends BaseDaoImpl<Long, User> {
 
 
     public static void main(String[] args) throws SQLException, DaoException {
+        Cache.warm();
+        DefaultConnectionPool.getInstance().init();
+
 
         DaoTest daoTest = new DaoTest();
         daoTest.smth();

@@ -3,10 +3,10 @@ package by.epam.processor;
 import by.epam.processor.annotation.Column;
 import by.epam.processor.annotation.Id;
 import by.epam.processor.annotation.Table;
-import by.epam.exception.DaoException;
+import by.epam.dao.exception.DaoException;
 import by.epam.processor.meta.EntityMeta;
 import by.epam.processor.meta.FieldMeta;
-import by.epam.processor.util.Assert;
+import by.epam.dao.Assert;
 import by.epam.processor.util.ReflectionUtil;
 
 import java.lang.reflect.Field;
@@ -22,7 +22,6 @@ public class QueryBuilder {
     public static String findAllQuery(Class<?> clazz) throws DaoException {
 
         EntityMeta entityMeta = Cache.ENTITY_META_DATA_CACHE.get(clazz);
-
         Assert.notNull(entityMeta, "entity " + clazz + " not found");
 
         String tableName = entityMeta.getTableName();
@@ -125,9 +124,7 @@ public class QueryBuilder {
         for (Field field : declaredFields) {
             if (field.isAnnotationPresent(Column.class)) {
                 String columnName = field.getAnnotation(Column.class).name();
-                System.out.println("col name: " + columnName);
                 if (!field.isAnnotationPresent(Id.class)) {
-
                     String columnValue = wrap(String.valueOf(ReflectionUtil.invokeGetter(entity, field.getName())));
                     columnsValues.put(columnName, columnValue);
                 }
@@ -150,9 +147,6 @@ public class QueryBuilder {
         return "\'" + value + "\'";
     }
 
-    private static String capitalizeFirstLetter(String value) {
-        return value.substring(0, 1).toUpperCase() + value.substring(1);
-    }
 
 
 }
