@@ -1,14 +1,9 @@
 package by.epam.processor.database;
 
 import by.epam.processor.CPException;
-import by.epam.processor.Cache;
-import by.epam.dao.exception.DaoException;
-import by.epam.dao.Assert;
-import by.epam.processor.util.ClassUtil;
 
 import java.sql.*;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 

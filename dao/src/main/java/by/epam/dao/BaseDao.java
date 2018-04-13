@@ -3,9 +3,10 @@ package by.epam.dao;
 import by.epam.entity.BaseEntity;
 import by.epam.dao.exception.DaoException;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface BaseDao <T, E extends BaseEntity> {
+public interface BaseDao <T extends Serializable, E extends BaseEntity> {
     List<E> findAll() throws DaoException;
 
     E findOne(T id) throws DaoException;

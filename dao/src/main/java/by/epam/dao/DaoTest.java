@@ -1,11 +1,11 @@
 package by.epam.dao;
 
-import by.epam.processor.Cache;
 import by.epam.processor.annotation.Query;
 import by.epam.processor.annotation.Repository;
 import by.epam.entity.User;
 import by.epam.dao.exception.DaoException;
 import by.epam.processor.database.DefaultConnectionPool;
+import by.epam.processor.util.CacheProcessor;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -24,18 +24,27 @@ public class DaoTest extends BaseDaoImpl<Long, User> {
         User one = findOne(7L);
         System.out.println(one);
 
+        User one1 = findOne(8L);
+        System.out.println(one1);
+
+        User one2 = findOne(7L);
+        System.out.println(one2);
+
+        User one3 = findOne(7L);
+        System.out.println(one3);
+//
 //        User user = new User();
-//        user.setEmail("abc@gmail.com");
+//        user.setEmail("abc12312123123@gmail.com");
 //        user.setPassword("123456");
 //        User saved = save(user);
 //        System.out.println(saved);
 //
-//        user.setEmail("asasd67das5@gmail.com");
+//        user.setEmail("asasadsadd67das5@gmail.com");
 //        User update = update(user);
 //
 //        System.out.println(update);
 //
-//        delete(7L);
+//        delete(6L);
 
 
 //        DSConnector dsConnector = new DSConnector();
@@ -45,7 +54,7 @@ public class DaoTest extends BaseDaoImpl<Long, User> {
 
 
     public static void main(String[] args) throws SQLException, DaoException {
-        Cache.warm();
+        CacheProcessor.getInstance().initCache(60000, 30000, 10000);
         DefaultConnectionPool.getInstance().init();
 
 

@@ -1,4 +1,10 @@
 package by.epam.entity;
 
-public class BaseEntity {
+import java.io.Serializable;
+
+public interface BaseEntity {
+
+    <T extends Serializable> T getId();
+
+
 }

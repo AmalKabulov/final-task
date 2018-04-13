@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity{
+public class User implements BaseEntity{
 
     @Column(name = "id")
     @Id
