@@ -146,6 +146,4 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
     }
 
 
-
-
 }
