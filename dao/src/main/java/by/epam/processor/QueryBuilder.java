@@ -1,5 +1,6 @@
 package by.epam.processor;
 
+import by.epam.entity.BaseEntity;
 import by.epam.processor.annotation.Column;
 import by.epam.processor.annotation.Id;
 import by.epam.processor.annotation.Table;
@@ -10,6 +11,7 @@ import by.epam.dao.Assert;
 import by.epam.processor.util.CacheProcessor;
 import by.epam.processor.util.ReflectionUtil;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -21,7 +23,22 @@ public class QueryBuilder {
 
     private static final CacheProcessor CACHE_PROCESSOR = CacheProcessor.getInstance();
 
-    public static String findAllQuery(Class<?> clazz) throws DaoException {
+
+    public static String countQuery(final Class<? extends BaseEntity> clazz) throws DaoException {
+
+        EntityMeta entityMeta = CACHE_PROCESSOR.getMeta(clazz);
+        Assert.notNull(entityMeta, "entity " + clazz + " not found");
+        String idColumnName = entityMeta.getIdColumnName();
+        String tableName = entityMeta.getTableName();
+
+        return new StringBuilder("select count(")
+                .append(tableName).append(".").append(idColumnName)
+                .append(") from ")
+                .append(tableName)
+                .append(";").toString();
+    }
+
+    public static String findAllQuery(final Class<? extends BaseEntity> clazz) throws DaoException {
 
         EntityMeta entityMeta = CACHE_PROCESSOR.getMeta(clazz);
         Assert.notNull(entityMeta, "entity " + clazz + " not found");
@@ -34,7 +51,17 @@ public class QueryBuilder {
     }
 
 
-    public static String findByIdQuery(Class<?> clazz, Object id) throws DaoException {
+
+    public static String findByLimit(final Class<? extends BaseEntity> clazz, final int skip, final int count) throws DaoException {
+        String findAllQuery = findAllQuery(clazz);
+        StringBuilder limitQuery = new StringBuilder(findAllQuery);
+        limitQuery.setLength(limitQuery.length() - 1);
+
+        return limitQuery.append(" limit ").append(skip).append(", ").append(count).append(";").toString();
+    }
+
+
+    public static String findByIdQuery(final Class<? extends BaseEntity> clazz, Object id) throws DaoException {
 
         EntityMeta entityMeta = CACHE_PROCESSOR.getMeta(clazz);
         Assert.notNull(entityMeta, "entity " + clazz + " not found");
@@ -53,7 +80,7 @@ public class QueryBuilder {
 
     }
 
-    public static String insertQuery(Object entity) {
+    public static String insertQuery(final Object entity) {
 
         Class<?> entityClass = entity.getClass();
         Map<String, String> columnsValues = getColumnsValues(entity);
@@ -69,10 +96,9 @@ public class QueryBuilder {
                 .append(values).append(")")
                 .append(";").toString();
 
-
     }
 
-    public static String updateQuery(Object entity) throws DaoException {
+    public static String updateQuery(final Object entity) throws DaoException {
 
         Class<?> entityClass = entity.getClass();
         Map<String, String> columnsValues = getColumnsValues(entity);
@@ -98,7 +124,7 @@ public class QueryBuilder {
     }
 
 
-    public static String deleteQuery(Class<?> clazz, Object id) throws DaoException {
+    public static String deleteQuery(final Class<? extends BaseEntity> clazz, final Serializable id) throws DaoException {
         EntityMeta entityMeta = CACHE_PROCESSOR.getMeta(clazz);
         Assert.notNull(entityMeta, "Entity: " + clazz + " not found");
         String tableName = entityMeta.getTableName();
@@ -142,7 +168,6 @@ public class QueryBuilder {
     private static String wrap(String value) {
         return "\'" + value + "\'";
     }
-
 
 
 }

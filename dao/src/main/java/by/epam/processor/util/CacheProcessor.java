@@ -47,8 +47,19 @@ public class CacheProcessor {
     }
 
 
-    private Map<Class<?>, EntityMeta> fillEntitiesMetaCache(final String pkgName) {
+    public List<? extends BaseEntity> getEntitiesByClass(final Class<? extends BaseEntity> entityClass) {
+        return entitiesCache.getByClass(entityClass);
+    }
 
+
+    public void putAll(final List<? extends BaseEntity> entities) {
+        for (BaseEntity entity : entities) {
+            entitiesCache.put(entity);
+        }
+    }
+
+
+    private Map<Class<?>, EntityMeta> fillEntitiesMetaCache(final String pkgName) {
         Map<Class<?>, EntityMeta> entitiesMeta = new HashMap<>();
         List<Class<?>> entities = AnnotationProcessor.getClassesByAnnotation(Entity.class, pkgName);
 

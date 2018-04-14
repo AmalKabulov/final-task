@@ -3,6 +3,8 @@ package by.epam.processor;
 import by.epam.entity.BaseEntity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -46,6 +48,14 @@ public class EntityCache/*<K extends BaseEntity>*/ /*implements Cache1<EntityCac
             this.id = id;
         }
 
+        public Class<? extends BaseEntity> getClazz() {
+            return clazz;
+        }
+
+        public Serializable getId() {
+            return id;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -83,6 +93,30 @@ public class EntityCache/*<K extends BaseEntity>*/ /*implements Cache1<EntityCac
         if (getCacheObject(key) != null) {
             this.values.remove(key);
         }
+    }
+
+
+    public List<? extends BaseEntity> getByClass(final Class<? extends BaseEntity> clazz) {
+        List<BaseEntity> entities = new ArrayList<>();
+        values.forEach((k, v) -> {
+            if (k.getClazz() == clazz) {
+                entities.add(v.value);
+            }
+        });
+
+
+//        Comparator<BaseEntity> comparator = Comparator.comparing(BaseEntity::getId);
+//        entities.sort(comparator);
+//
+//        List<BaseEntity> correct = new ArrayList<>();
+//
+//        entities.forEach(e ->  {
+//            int i = 0;
+//
+//
+//
+//        });
+        return entities;
     }
 
     private CacheObject getCacheObject(Key key) {

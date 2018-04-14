@@ -15,7 +15,7 @@ import java.util.List;
 public class DaoTest extends BaseDaoImpl<Long, User> {
 
     @Query("select * from epam-dno")
-    public void smth() throws SQLException, DaoException {
+    public void smth() throws DaoException {
 
         List<User> all = findAll();
         all.forEach(System.out::println);
@@ -32,6 +32,10 @@ public class DaoTest extends BaseDaoImpl<Long, User> {
 
         User one3 = findOne(7L);
         System.out.println(one3);
+
+
+        List<User> byLimit = findByLimit(0, 5);
+        byLimit.forEach(System.out::println);
 //
 //        User user = new User();
 //        user.setEmail("abc12312123123@gmail.com");
@@ -53,7 +57,7 @@ public class DaoTest extends BaseDaoImpl<Long, User> {
     }
 
 
-    public static void main(String[] args) throws SQLException, DaoException {
+    public static void main(String[] args) throws DaoException {
         CacheProcessor.getInstance().initCache(60000, 30000, 10000);
         DefaultConnectionPool.getInstance().init();
 

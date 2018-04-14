@@ -27,22 +27,57 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
 
     @SuppressWarnings("unchecked")
     public List<E> findAll() throws DaoException {
-
-        List<E> objects = new ArrayList<>();
+        List<E> entities = new ArrayList<>();
         Class<? extends BaseEntity> entityClass = getParametrizeClass();
         String query = QueryBuilder.findAllQuery(entityClass);
+
+        List<? extends BaseEntity> entitiesByClass = CACHE_PROCESSOR.getEntitiesByClass(entityClass);
+
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+
+            Long rowCounts = getRowCounts(entityClass, connection);
+
+            if (rowCounts != null && rowCounts == entitiesByClass.size()) {
+
+            }
+
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                BaseEntity entity = resultSetParserManager.parse(entityClass, resultSet);
+                entities.add((E) entity);
+            }
+            Assert.notEmpty(entities, "Nothing was found");
+            return entities;
+        } catch (SQLException | CPException e) {
+            throw new DaoException("Error while finding all.", e);
+        }
+
+    }
+
+
+    public List<E> findByLimit(final int skip, final int count) throws DaoException {
+        List<E> entities = new ArrayList<>();
+        Class<? extends BaseEntity> entityClass = getParametrizeClass();
+        String query = QueryBuilder.findByLimit(entityClass, skip, count);
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 BaseEntity entity = resultSetParserManager.parse(entityClass, resultSet);
-                objects.add((E) entity);
+                entities.add((E) entity);
             }
-            Assert.notEmpty(objects, "Nothing was found");
-            return objects;
+
+            Assert.notEmpty(entities, "Nothing was found");
+            CACHE_PROCESSOR.putAll(entities);
+            return entities;
+
         } catch (SQLException | CPException e) {
-            throw new DaoException("Error while finding all.", e);
+            throw new DaoException("Error while finding by limit", e);
         }
 
     }
@@ -89,7 +124,6 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
             throw new DaoException("Error while deleting by id.", e);
         }
 
-
     }
 
     public E save(E entity) throws DaoException {
@@ -119,18 +153,34 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
 
     public E update(E entity) throws DaoException {
         String query = QueryBuilder.updateQuery(entity);
-
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             int updatedRows = preparedStatement.executeUpdate();
             Assert.notZero(updatedRows, "updating entity: " + entity + " failed");
+            CACHE_PROCESSOR.putEntity(entity);
             return entity;
 
         } catch (SQLException | CPException e) {
 
             throw new DaoException("Error while updating entity: " + entity, e);
         }
+
+
+    }
+
+
+    private Long getRowCounts(final Class<? extends BaseEntity> clazz, Connection connection) throws DaoException, SQLException {
+        String countQuery = QueryBuilder.countQuery(clazz);
+        Long rowCount = null;
+
+        PreparedStatement preparedStatement = connection.prepareStatement(countQuery);
+        ResultSet counts = preparedStatement.executeQuery();
+        if (counts.next()) {
+            rowCount = counts.getLong(1);
+        }
+        preparedStatement.close();
+        return rowCount;
 
 
     }
