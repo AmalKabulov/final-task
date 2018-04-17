@@ -1,6 +1,6 @@
 package by.epam.processor.database;
 
-import by.epam.processor.CPException;
+import by.epam.processor.exception.CPException;
 
 import java.sql.*;
 import java.util.Map;
@@ -20,37 +20,6 @@ public class DefaultConnection implements Connection {
     public Statement createStatement() throws SQLException {
         return connection.createStatement();
     }
-
-    /*
-    * Return statement with sql query
-    * sql query gets from @Query annotation
-    * above method which uses this prepareStatement
-    * */
-
-//    public PreparedStatement prepareStatement() throws SQLException, DaoException {
-//        String query = null;
-//
-//        long startTime = System.nanoTime();
-//
-//        StackTraceElement callerMethodInfo = ClassUtil.getCallerMethodInfo();
-//
-//        long endTime = System.nanoTime();
-//
-//        System.out.println((endTime - startTime));
-//        String callerClassName = callerMethodInfo.getClassName();
-//        String callerMethod = callerMethodInfo.getMethodName();
-//
-//        Map<String, String> stringStringMap = Cache.REPOSITORIES_META.get(callerClassName);
-//        if (!Objects.equals(stringStringMap, null)) {
-//            query = stringStringMap.get(callerMethod);
-//        }
-//
-//        Assert.notNull(query, "query not found");
-//
-//        System.out.println(query);
-//
-//        return prepareStatement(query);
-//    }
 
     @Override
     public PreparedStatement prepareStatement(String sql) throws SQLException {

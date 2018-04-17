@@ -1,7 +1,7 @@
 package by.epam.processor.database;
 
 import by.epam.dao.exception.DaoException;
-import by.epam.processor.CPException;
+import by.epam.processor.exception.CPException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -121,7 +121,7 @@ public class DefaultConnectionPool {
             }
 
         } catch (SQLException e) {
-            throw new CPException("dsada");
+            throw new CPException("Could not free connection: ", e);
         }
     }
 

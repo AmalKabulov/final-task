@@ -25,12 +25,15 @@ public class ResultSetParserManager {
     }
 
 
-    public BaseEntity parse(Class<?> entityClass, ResultSet resultSet) throws SQLException {
-        return PARSERS.get(entityClass).parse(resultSet);
+    public BaseEntity parse(final Class<? extends BaseEntity> entityClass, final ResultSet resultSet, final String tableAlias) throws SQLException {
+        return PARSERS.get(entityClass).parse(resultSet, tableAlias);
     }
 
+    public BaseEntity parse(final Class<? extends BaseEntity> entityClass, final ResultSet resultSet) throws SQLException {
+        return parse(entityClass, resultSet, null);
+    }
 
-    public static ResultSetParserManager getINSTANCE() {
+    public static ResultSetParserManager getInstance() {
         return INSTANCE;
     }
 }

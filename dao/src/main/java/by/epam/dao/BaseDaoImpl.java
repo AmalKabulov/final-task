@@ -1,14 +1,14 @@
 package by.epam.dao;
 
-import by.epam.processor.CPException;
-import by.epam.processor.QueryBuilder;
+import by.epam.processor.exception.CPException;
+import by.epam.processor.query_builder.QueryBuilder;
 import by.epam.processor.annotation.Repository;
 import by.epam.entity.BaseEntity;
 import by.epam.dao.exception.DaoException;
 import by.epam.processor.database.DefaultConnectionPool;
 import by.epam.processor.meta.EntityMeta;
 import by.epam.processor.parser.ResultSetParserManager;
-import by.epam.processor.util.CacheProcessor;
+import by.epam.processor.CacheProcessor;
 import by.epam.processor.util.ReflectionUtil;
 
 import java.io.Serializable;
@@ -19,9 +19,8 @@ import java.util.List;
 @Repository
 public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> implements BaseDao<T, E> {
 
-    private static final CacheProcessor CACHE_PROCESSOR = CacheProcessor.getInstance();
-
-    private ResultSetParserManager resultSetParserManager = ResultSetParserManager.getINSTANCE();
+    private CacheProcessor cacheProcessor = CacheProcessor.getInstance();
+    private ResultSetParserManager resultSetParserManager = ResultSetParserManager.getInstance();
     private DefaultConnectionPool connectionPool = DefaultConnectionPool.getInstance();
 
 
@@ -31,17 +30,17 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
         Class<? extends BaseEntity> entityClass = getParametrizeClass();
         String query = QueryBuilder.findAllQuery(entityClass);
 
-        List<? extends BaseEntity> entitiesByClass = CACHE_PROCESSOR.getEntitiesByClass(entityClass);
+        List<? extends BaseEntity> entitiesFromCache = cacheProcessor.getEntitiesByClass(entityClass);
 
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-
             Long rowCounts = getRowCounts(entityClass, connection);
 
-            if (rowCounts != null && rowCounts == entitiesByClass.size()) {
-
+            if (rowCounts != null && rowCounts == entitiesFromCache.size()) {
+                System.out.println("Returning from cache");
+                return ((List<E>) entitiesFromCache);
             }
 
 
@@ -73,7 +72,7 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
             }
 
             Assert.notEmpty(entities, "Nothing was found");
-            CACHE_PROCESSOR.putAll(entities);
+            cacheProcessor.putAll(entities);
             return entities;
 
         } catch (SQLException | CPException e) {
@@ -85,7 +84,7 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
     @SuppressWarnings("unchecked")
     public E findOne(T id) throws DaoException {
         Class<? extends BaseEntity> entityClass = getParametrizeClass();
-        BaseEntity entityFromCache = CACHE_PROCESSOR.getEntity(entityClass, id);
+        BaseEntity entityFromCache = cacheProcessor.getEntity(entityClass, id);
         if (entityFromCache != null) {
             System.out.println("FROM CACHE...");
             return (E) entityFromCache;
@@ -102,7 +101,7 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
                 entity = resultSetParserManager.parse(entityClass, resultSet);
             }
             Assert.notNull(entity, "Nothing was found");
-            CACHE_PROCESSOR.putEntity(entity);
+            cacheProcessor.putEntity(entity);
             return (E) entity;
         } catch (SQLException | CPException e) {
             throw new DaoException("Error while searching by id. ", e);
@@ -119,7 +118,7 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             int result = preparedStatement.executeUpdate();
             Assert.notZero(result, "Deleting entity: " + entityClass + " failed");
-            CACHE_PROCESSOR.deleteEntity(entityClass, id);
+            cacheProcessor.deleteEntity(entityClass, id);
         } catch (SQLException | CPException e) {
             throw new DaoException("Error while deleting by id.", e);
         }
@@ -128,7 +127,7 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
 
     public E save(E entity) throws DaoException {
         String query = QueryBuilder.insertQuery(entity);
-        EntityMeta entityMeta = CACHE_PROCESSOR.getMeta(entity.getClass());
+        EntityMeta entityMeta = cacheProcessor.getMeta(entity.getClass());
         Assert.notNull(entityMeta, "entity: " + entity + " not found");
         String idColumnFieldName = entityMeta.getIdColumnFieldName();
 
@@ -142,7 +141,7 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
             Long id = resultSet.getLong(1);
             ReflectionUtil.invokeSetter(entity, idColumnFieldName, id);
 
-            CACHE_PROCESSOR.putEntity(entity);
+            cacheProcessor.putEntity(entity);
             return entity;
 
         } catch (SQLException | CPException e) {
@@ -158,7 +157,7 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
 
             int updatedRows = preparedStatement.executeUpdate();
             Assert.notZero(updatedRows, "updating entity: " + entity + " failed");
-            CACHE_PROCESSOR.putEntity(entity);
+            cacheProcessor.putEntity(entity);
             return entity;
 
         } catch (SQLException | CPException e) {
@@ -194,6 +193,5 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
     private Class<? extends BaseEntity> getParametrizeClass() {
         return (Class<? extends BaseEntity>) ReflectionUtil.getGenericParameterClass(getClass(), 1);
     }
-
 
 }

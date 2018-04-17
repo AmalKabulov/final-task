@@ -7,5 +7,5 @@ import java.sql.SQLException;
 
 public interface ResultSetParser {
 
-    BaseEntity parse(final ResultSet resultSet) throws SQLException;
+    BaseEntity parse(final ResultSet resultSet, final String tableAlias) throws SQLException;
 }

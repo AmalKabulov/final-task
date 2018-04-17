@@ -1,6 +1,9 @@
-package by.epam.processor.util;
+package by.epam.processor;
+
+import by.epam.processor.util.PackageScanner;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,6 +15,7 @@ public class AnnotationProcessor {
                 .filter(clazz -> clazz.isAnnotationPresent(annotation))
                 .collect(Collectors.toList());
     }
+
 
 
 

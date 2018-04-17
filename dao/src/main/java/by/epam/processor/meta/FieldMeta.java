@@ -1,9 +1,15 @@
 package by.epam.processor.meta;
 
+import java.lang.annotation.Annotation;
+import java.util.HashMap;
+import java.util.Map;
+
 public class FieldMeta {
     private String fieldName;
-    private String mappedColumn;
+    private String columnName;
     private Class<?> fieldType;
+    private Class<?> fieldGenericType;
+    private Map<Class<? extends Annotation>, Annotation> annotations = new HashMap<>();
 
 
     public FieldMeta() {
@@ -17,12 +23,12 @@ public class FieldMeta {
         this.fieldName = fieldName;
     }
 
-    public String getMappedColumn() {
-        return mappedColumn;
+    public String getColumnName() {
+        return columnName;
     }
 
-    public void setMappedColumn(String mappedColumn) {
-        this.mappedColumn = mappedColumn;
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
     }
 
     public Class<?> getFieldType() {
@@ -31,5 +37,21 @@ public class FieldMeta {
 
     public void setFieldType(Class<?> fieldType) {
         this.fieldType = fieldType;
+    }
+
+    public Class<?> getFieldGenericType() {
+        return fieldGenericType;
+    }
+
+    public void setFieldGenericType(Class<?> fieldGenericType) {
+        this.fieldGenericType = fieldGenericType;
+    }
+
+    public Map<Class<? extends Annotation>, Annotation> getAnnotations() {
+        return annotations;
+    }
+
+    public void setAnnotations(Map<Class<? extends Annotation>, Annotation> annotations) {
+        this.annotations = annotations;
     }
 }

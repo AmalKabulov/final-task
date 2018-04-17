@@ -1,13 +1,12 @@
 package by.epam.dao;
 
+import by.epam.dao.exception.DaoException;
+import by.epam.entity.User;
 import by.epam.processor.annotation.Query;
 import by.epam.processor.annotation.Repository;
-import by.epam.entity.User;
-import by.epam.dao.exception.DaoException;
 import by.epam.processor.database.DefaultConnectionPool;
-import by.epam.processor.util.CacheProcessor;
+import by.epam.processor.CacheProcessor;
 
-import java.sql.SQLException;
 import java.util.List;
 
 
@@ -17,25 +16,27 @@ public class DaoTest extends BaseDaoImpl<Long, User> {
     @Query("select * from epam-dno")
     public void smth() throws DaoException {
 
+        List<User> byLimit = findByLimit(0, 5);
+        byLimit.forEach(System.out::println);
+
         List<User> all = findAll();
         all.forEach(System.out::println);
 //        findAll();
 
-        User one = findOne(7L);
+        User one = findOne(1L);
         System.out.println(one);
 
-        User one1 = findOne(8L);
-        System.out.println(one1);
+//        User one1 = findOne(2L);
+//        System.out.println(one1);
 
-        User one2 = findOne(7L);
+        User one2 = findOne(1L);
         System.out.println(one2);
 
-        User one3 = findOne(7L);
+        User one3 = findOne(1L);
         System.out.println(one3);
 
 
-        List<User> byLimit = findByLimit(0, 5);
-        byLimit.forEach(System.out::println);
+
 //
 //        User user = new User();
 //        user.setEmail("abc12312123123@gmail.com");
@@ -58,11 +59,14 @@ public class DaoTest extends BaseDaoImpl<Long, User> {
 
 
     public static void main(String[] args) throws DaoException {
-        CacheProcessor.getInstance().initCache(60000, 30000, 10000);
+        CacheProcessor.getInstance().initCache(10000, 5000, 10000);
         DefaultConnectionPool.getInstance().init();
-
 
         DaoTest daoTest = new DaoTest();
         daoTest.smth();
+//        while(true) {
+//
+//        }
+
     }
 }

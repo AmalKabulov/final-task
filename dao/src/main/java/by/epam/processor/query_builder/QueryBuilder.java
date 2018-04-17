@@ -1,6 +1,7 @@
-package by.epam.processor;
+package by.epam.processor.query_builder;
 
 import by.epam.entity.BaseEntity;
+import by.epam.processor.CacheProcessor;
 import by.epam.processor.annotation.Column;
 import by.epam.processor.annotation.Id;
 import by.epam.processor.annotation.Table;
@@ -8,7 +9,6 @@ import by.epam.dao.exception.DaoException;
 import by.epam.processor.meta.EntityMeta;
 import by.epam.processor.meta.FieldMeta;
 import by.epam.dao.Assert;
-import by.epam.processor.util.CacheProcessor;
 import by.epam.processor.util.ReflectionUtil;
 
 import java.io.Serializable;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class QueryBuilder {
+public abstract class QueryBuilder {
 
     private static final CacheProcessor CACHE_PROCESSOR = CacheProcessor.getInstance();
 
@@ -160,7 +160,7 @@ public class QueryBuilder {
 
     private static String getColumns(EntityMeta entityMeta) {
         Collection<FieldMeta> values = entityMeta.getFieldMetas().values();
-        List<String> allColumns = values.stream().map(FieldMeta::getMappedColumn).collect(Collectors.toList());
+        List<String> allColumns = values.stream().map(FieldMeta::getColumnName).collect(Collectors.toList());
         return String.join(", ", allColumns);
     }
 

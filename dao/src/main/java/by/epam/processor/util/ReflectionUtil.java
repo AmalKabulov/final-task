@@ -1,6 +1,6 @@
 package by.epam.processor.util;
 
-import by.epam.processor.ReflectionException;
+import by.epam.processor.exception.ReflectionException;
 
 import java.lang.reflect.*;
 

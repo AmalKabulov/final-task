@@ -1,4 +1,4 @@
-package by.epam.processor;
+package by.epam.processor.exception;
 
 public class ReflectionException extends RuntimeException {
     public ReflectionException() {
