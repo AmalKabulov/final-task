@@ -33,6 +33,7 @@ public class MetaProcessor {
         Table table = clazz.getAnnotation(Table.class);
         String tableName = table.name();
         entityMeta.setTableName(tableName);
+        entityMeta.setEntityClassName(clazz.getName());
 
         Field[] classFields = clazz.getDeclaredFields();
 
@@ -57,6 +58,7 @@ public class MetaProcessor {
         fieldMeta.setFieldName(field.getName());
         fieldMeta.setFieldType(field.getType());
 
+
         if (field.isAnnotationPresent(Column.class)) {
             Column column = field.getAnnotation(Column.class);
             String columnName = column.name();
@@ -78,7 +80,7 @@ public class MetaProcessor {
         if (fieldAnnotations != null && fieldAnnotations.length > 0) {
 
             for (Annotation annotation : fieldAnnotations) {
-                fieldMeta.getAnnotations().put(annotation.getClass(), annotation);
+                fieldMeta.getAnnotations().put(annotation.annotationType(), annotation);
             }
 
         }

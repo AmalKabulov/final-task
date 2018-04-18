@@ -9,6 +9,7 @@ import by.epam.processor.database.DefaultConnectionPool;
 import by.epam.processor.meta.EntityMeta;
 import by.epam.processor.parser.ResultSetParserManager;
 import by.epam.processor.CacheProcessor;
+import by.epam.processor.query_builder.SelectQueryBuilder;
 import by.epam.processor.util.ReflectionUtil;
 
 import java.io.Serializable;
@@ -20,7 +21,7 @@ import java.util.List;
 public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> implements BaseDao<T, E> {
 
     private CacheProcessor cacheProcessor = CacheProcessor.getInstance();
-    private ResultSetParserManager resultSetParserManager = ResultSetParserManager.getInstance();
+    private ResultSetParserManager parserManager = ResultSetParserManager.getInstance();
     private DefaultConnectionPool connectionPool = DefaultConnectionPool.getInstance();
 
 
@@ -28,7 +29,8 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
     public List<E> findAll() throws DaoException {
         List<E> entities = new ArrayList<>();
         Class<? extends BaseEntity> entityClass = getParametrizeClass();
-        String query = QueryBuilder.findAllQuery(entityClass);
+        String query = SelectQueryBuilder.findAllQuery(entityClass);
+        System.out.println("QUERY: " + query);
 
         List<? extends BaseEntity> entitiesFromCache = cacheProcessor.getEntitiesByClass(entityClass);
 
@@ -45,8 +47,10 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
 
 
             ResultSet resultSet = preparedStatement.executeQuery();
+//            parserManager.complexParse(entityClass, resultSet);
+
             while (resultSet.next()) {
-                BaseEntity entity = resultSetParserManager.parse(entityClass, resultSet);
+                BaseEntity entity = parserManager.parse(entityClass, resultSet);
                 entities.add((E) entity);
             }
             Assert.notEmpty(entities, "Nothing was found");
@@ -67,7 +71,7 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                BaseEntity entity = resultSetParserManager.parse(entityClass, resultSet);
+                BaseEntity entity = parserManager.parse(entityClass, resultSet);
                 entities.add((E) entity);
             }
 
@@ -98,7 +102,7 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                entity = resultSetParserManager.parse(entityClass, resultSet);
+                entity = parserManager.parse(entityClass, resultSet);
             }
             Assert.notNull(entity, "Nothing was found");
             cacheProcessor.putEntity(entity);

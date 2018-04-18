@@ -1,12 +1,13 @@
 package by.epam.entity;
 
-import by.epam.processor.annotation.Column;
-import by.epam.processor.annotation.Id;
+import by.epam.processor.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "roles")
 public class Role implements BaseEntity {
 
     @Column(name = "id")
@@ -16,7 +17,9 @@ public class Role implements BaseEntity {
     @Column(name = "role_name")
     private String roleName;
 
-
+    @ManyToMany
+    @JoinTable(name = "users_roles", joinColumns = {@JoinColumn(name = "id_role")},
+            inverseJoinColumns = {@JoinColumn(name = "id_user")})
     private List<User> users = new ArrayList<>();
 
 
@@ -47,7 +50,7 @@ public class Role implements BaseEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Role)) return false;
         Role role = (Role) o;
         return Objects.equals(id, role.id) &&
                 Objects.equals(roleName, role.roleName) &&

@@ -16,24 +16,24 @@ public class DaoTest extends BaseDaoImpl<Long, User> {
     @Query("select * from epam-dno")
     public void smth() throws DaoException {
 
-        List<User> byLimit = findByLimit(0, 5);
-        byLimit.forEach(System.out::println);
+//        List<User> byLimit = findByLimit(0, 5);
+//        byLimit.forEach(System.out::println);
 
         List<User> all = findAll();
         all.forEach(System.out::println);
 //        findAll();
 
-        User one = findOne(1L);
-        System.out.println(one);
-
-//        User one1 = findOne(2L);
-//        System.out.println(one1);
-
-        User one2 = findOne(1L);
-        System.out.println(one2);
-
-        User one3 = findOne(1L);
-        System.out.println(one3);
+//        User one = findOne(1L);
+//        System.out.println(one);
+//
+////        User one1 = findOne(2L);
+////        System.out.println(one1);
+//
+//        User one2 = findOne(1L);
+//        System.out.println(one2);
+//
+//        User one3 = findOne(1L);
+//        System.out.println(one3);
 
 
 
@@ -64,9 +64,14 @@ public class DaoTest extends BaseDaoImpl<Long, User> {
 
         DaoTest daoTest = new DaoTest();
         daoTest.smth();
+
+
 //        while(true) {
 //
 //        }
+
+;
+
 
     }
 }

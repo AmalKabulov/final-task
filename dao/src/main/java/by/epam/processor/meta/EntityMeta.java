@@ -4,6 +4,7 @@ import java.util.*;
 
 public class EntityMeta {
 
+    private String entityClassName;
     private String tableName;
     private String idColumnName;
     private String idColumnFieldName;
@@ -13,6 +14,14 @@ public class EntityMeta {
     private Map<String, FieldMeta> fieldMetas = new LinkedHashMap<>();
 
     public EntityMeta() {
+    }
+
+    public String getEntityClassName() {
+        return entityClassName;
+    }
+
+    public void setEntityClassName(String entityClassName) {
+        this.entityClassName = entityClassName;
     }
 
     public String getTableName() {

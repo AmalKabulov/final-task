@@ -1,10 +1,9 @@
 package by.epam.entity;
 
-import by.epam.processor.annotation.Column;
-import by.epam.processor.annotation.Entity;
-import by.epam.processor.annotation.Id;
-import by.epam.processor.annotation.Table;
+import by.epam.processor.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -20,6 +19,10 @@ public class User implements BaseEntity{
 
     @Column(name = "password")
     private String password;
+
+
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    private List<Role> roles = new ArrayList<>();
 
 
     public User() {
@@ -50,6 +53,13 @@ public class User implements BaseEntity{
         this.password = password;
     }
 
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -58,14 +68,16 @@ public class User implements BaseEntity{
         User user = (User) o;
         return Objects.equals(id, user.id) &&
                 Objects.equals(email, user.email) &&
-                Objects.equals(password, user.password);
+                Objects.equals(password, user.password) &&
+                Objects.equals(roles, user.roles);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, email, password);
+        return Objects.hash(id, email, password, roles);
     }
+
 
     @Override
     public String toString() {
@@ -73,6 +85,7 @@ public class User implements BaseEntity{
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }

@@ -2,6 +2,7 @@ package by.epam.processor.util;
 
 import by.epam.processor.exception.ReflectionException;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 
 public class ReflectionUtil {
@@ -59,7 +60,6 @@ public class ReflectionUtil {
 
 
     public static Object newInstance(String className) {
-
         try {
             return newClass(className).getDeclaredConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
