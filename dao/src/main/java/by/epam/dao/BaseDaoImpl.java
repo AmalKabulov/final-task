@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public abstract class BaseDaoImpl<T extends Serializable, E> implements BaseDao<T, E> {
+public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> implements BaseDao<T, E> {
 
     private CacheProcessor cacheProcessor = CacheProcessor.getInstance();
     private ResultSetParserManager parserManager = ResultSetParserManager.getInstance();
@@ -74,7 +74,7 @@ public abstract class BaseDaoImpl<T extends Serializable, E> implements BaseDao<
             }
 
             Assert.notEmpty(entities, "Nothing was found");
-//            cacheProcessor.putAll(entities);
+            cacheProcessor.putAll(entities);
             return entities;
 
         } catch (SQLException | CPException e) {
