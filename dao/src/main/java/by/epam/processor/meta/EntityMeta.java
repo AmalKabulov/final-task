@@ -6,8 +6,10 @@ public class EntityMeta {
 
     private String entityClassName;
     private String tableName;
+
     private String idColumnName;
     private String idColumnFieldName;
+    private Class<?> idColumnType;
 
 //    List<FieldMeta> fieldMetas = new ArrayList<>();
 
@@ -55,5 +57,13 @@ public class EntityMeta {
 
     public void setIdColumnFieldName(String idColumnFieldName) {
         this.idColumnFieldName = idColumnFieldName;
+    }
+
+    public Class<?> getIdColumnType() {
+        return idColumnType;
+    }
+
+    public void setIdColumnType(Class<?> idColumnType) {
+        this.idColumnType = idColumnType;
     }
 }

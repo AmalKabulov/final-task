@@ -28,8 +28,8 @@ public class ResultSetParserManager {
     }
 
 
-//    public BaseEntity parse(final Class<? extends BaseEntity> entityClass, final ResultSet resultSet) throws SQLException {
-//        return parse(entityClass, resultSet/*, null*/);
+//    public BaseEntity parseSimple(final Class<? extends BaseEntity> entityClass, final ResultSet resultSet) throws SQLException {
+//        return parseSimple(entityClass, resultSet/*, null*/);
 //    }
 
 

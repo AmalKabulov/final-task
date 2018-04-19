@@ -42,6 +42,7 @@ public class MetaProcessor {
                 Column column = field.getAnnotation(Column.class);
                 entityMeta.setIdColumnFieldName(field.getName());
                 entityMeta.setIdColumnName(column.name());
+                entityMeta.setIdColumnType(field.getType());
             }
 
             FieldMeta fieldMeta = createFieldMeta(field);

@@ -1,6 +1,7 @@
 package by.epam.dao;
 
 import by.epam.processor.exception.CPException;
+import by.epam.processor.parser.Parser;
 import by.epam.processor.query_builder.QueryBuilder;
 import by.epam.processor.annotation.Repository;
 import by.epam.entity.BaseEntity;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> implements BaseDao<T, E> {
+public abstract class BaseDaoImpl<T extends Serializable, E> implements BaseDao<T, E> {
 
     private CacheProcessor cacheProcessor = CacheProcessor.getInstance();
     private ResultSetParserManager parserManager = ResultSetParserManager.getInstance();
@@ -45,14 +46,11 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
                 return ((List<E>) entitiesFromCache);
             }
 
-
+            Parser parser = new Parser();
             ResultSet resultSet = preparedStatement.executeQuery();
 //            parserManager.complexParse(entityClass, resultSet);
+             entities = (List<E>) parser.parseComplex(entityClass, resultSet);
 
-            while (resultSet.next()) {
-                BaseEntity entity = parserManager.parse(entityClass, resultSet);
-                entities.add((E) entity);
-            }
             Assert.notEmpty(entities, "Nothing was found");
             return entities;
         } catch (SQLException | CPException e) {
@@ -76,7 +74,7 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
             }
 
             Assert.notEmpty(entities, "Nothing was found");
-            cacheProcessor.putAll(entities);
+//            cacheProcessor.putAll(entities);
             return entities;
 
         } catch (SQLException | CPException e) {
@@ -145,7 +143,7 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
             Long id = resultSet.getLong(1);
             ReflectionUtil.invokeSetter(entity, idColumnFieldName, id);
 
-            cacheProcessor.putEntity(entity);
+//            cacheProcessor.putEntity(entity);
             return entity;
 
         } catch (SQLException | CPException e) {
@@ -161,7 +159,7 @@ public abstract class BaseDaoImpl<T extends Serializable, E extends BaseEntity> 
 
             int updatedRows = preparedStatement.executeUpdate();
             Assert.notZero(updatedRows, "updating entity: " + entity + " failed");
-            cacheProcessor.putEntity(entity);
+//            cacheProcessor.putEntity(entity);
             return entity;
 
         } catch (SQLException | CPException e) {

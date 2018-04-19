@@ -73,7 +73,7 @@ public class EntityCache/*<K extends BaseEntity>*/ /*implements Cache1<EntityCac
         return entities;
     }
 
-    public void cleanup() {
+    private void cleanup() {
         final long now = System.currentTimeMillis();
         final Iterator<Map.Entry<Key, CacheObject>> iterator = this.values.entrySet().iterator();
         CacheObject cacheObject = null;

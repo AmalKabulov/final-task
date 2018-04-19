@@ -51,14 +51,14 @@ public class UserResultSetParser implements ResultSetParser {
 //            String idCol = tableAlias + "." + idColumn;
 //            String emailCol = tableAlias + "." + emailColumn;
 //            String passwordCol = tableAlias + "." + passwordColumn;
-//            return parse(resultSet, idCol, emailCol, passwordCol);
+//            return parseSimple(resultSet, idCol, emailCol, passwordCol);
 //        }
 
-//        return parse(resultSet, idColumn, emailColumn, passwordColumn);
+//        return parseSimple(resultSet, idColumn, emailColumn, passwordColumn);
     }
 
 
-//    private User parse(final ResultSet resultSet, final String idCol, final String emailCol, final String passwordCol) throws SQLException {
+//    private User parseSimple(final ResultSet resultSet, final String idCol, final String emailCol, final String passwordCol) throws SQLException {
 //        User user = new User();
 //
 //        user.setId(resultSet.getLong(idCol));
@@ -95,7 +95,7 @@ public class UserResultSetParser implements ResultSetParser {
                     BaseEntity role = parserManager.parse((Class<? extends BaseEntity>) fieldMeta.getFieldGenericType(), resultSet);
                     user.getRoles().add((Role) role);
                 } /*else if (annotations.containsKey(ManyToOne.class) || annotations.containsKey(OneToOne.class)) {
-                    parserManager.parse((Class<? extends BaseEntity>) fieldMeta.getFieldType(), resultSet);
+                    parserManager.parseSimple((Class<? extends BaseEntity>) fieldMeta.getFieldType(), resultSet);
                 }*/
             }
 
