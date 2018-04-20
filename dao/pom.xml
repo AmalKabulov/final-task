@@ -26,6 +26,13 @@
             <scope>test</scope>
         </dependency>
 
+
+        <dependency>
+            <groupId>com.ititon</groupId>
+            <artifactId>jdbc-orm</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

@@ -1,4 +1,4 @@
-package by.epam.processor.database;
+package by.epam;
 
 public final class DSProperties {
 

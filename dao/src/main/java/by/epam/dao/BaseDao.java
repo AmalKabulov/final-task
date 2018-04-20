@@ -1,6 +1,5 @@
 package by.epam.dao;
 
-import by.epam.entity.BaseEntity;
 import by.epam.dao.exception.DaoException;
 
 import java.io.Serializable;

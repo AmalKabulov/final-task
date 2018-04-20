@@ -1,6 +1,8 @@
 package by.epam.entity;
 
-import by.epam.processor.annotation.*;
+//import by.epam.processor.annotation.*;
+
+import com.ititon.jdbc_orm.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
