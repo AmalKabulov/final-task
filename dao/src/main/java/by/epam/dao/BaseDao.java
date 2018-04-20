@@ -1,18 +1,10 @@
 package by.epam.dao;
 
-import by.epam.dao.exception.DaoException;
+import by.epam.entity.BaseEntity;
+import com.ititon.jdbc_orm.DefaultRepository;
 
 import java.io.Serializable;
-import java.util.List;
 
-public interface BaseDao <T extends Serializable, E> {
-    List<E> findAll() throws DaoException;
+public abstract class BaseDao <E extends BaseEntity, ID extends Serializable> extends DefaultRepository<E, ID> {
 
-    E findOne(T id) throws DaoException;
-
-    void delete(T id) throws DaoException;
-
-    E save(E entity) throws DaoException;
-
-    E update(E entity) throws DaoException;
 }
