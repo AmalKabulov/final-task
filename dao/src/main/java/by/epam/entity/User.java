@@ -26,6 +26,9 @@ public class User implements BaseEntity{
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Order> orders = new ArrayList<>();
+
 
     public User() {
     }
@@ -63,23 +66,31 @@ public class User implements BaseEntity{
         this.roles = roles;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return Objects.equals(id, user.id) &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password) &&
-                Objects.equals(roles, user.roles);
+                Objects.equals(roles, user.roles) &&
+                Objects.equals(orders, user.orders);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, email, password, roles);
+        return Objects.hash(id, email, password, roles, orders);
     }
-
 
     @Override
     public String toString() {
@@ -88,6 +99,7 @@ public class User implements BaseEntity{
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
+                ", orders=" + orders +
                 '}';
     }
 }

@@ -52,6 +52,31 @@
                     <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <groupId>com.ititon</groupId>
+                            <artifactId>jdbc-orm</artifactId>
+                            <version>1.0</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/libs/jdbcorm-1.0-SNAPSHOT.jar</file>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
         </plugins>
     </build>
+
+    <!--install:install-file -Dfile=${basedir}/libs/jdbcorm-1.0-SNAPSHOT.jar -DgroupId=com.ititon -DartifactId=jdbc-orm -Dversion=1.0 -Dpackaging=jar-->
 </project>
