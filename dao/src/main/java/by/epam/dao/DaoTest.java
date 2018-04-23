@@ -1,6 +1,7 @@
 package by.epam.dao;
 
 import by.epam.DSProperties;
+import by.epam.entity.Role;
 import by.epam.entity.User;
 import com.ititon.jdbc_orm.meta.EntityMeta;
 import com.ititon.jdbc_orm.processor.CacheProcessor;
@@ -26,7 +27,16 @@ public class DaoTest {
 
         UserDao userDao = new UserDao();
         System.out.println("By id: " + userDao.findOne(1L));
-
+//
+//        User user = new User();
+//        user.setId(123L);
+//        user.setEmail("lalalalal@gmail.com");
+//        user.setPassword("asdasdas");
+//        Role role = new Role();
+//        role.setId(111L);
+//        role.setRoleName("kolpak vsemu");
+//        user.getRoles().add(role);
+//        userDao.save(user);
         System.out.println("Find all:");
         userDao.findAll().forEach(System.out::println);
 
