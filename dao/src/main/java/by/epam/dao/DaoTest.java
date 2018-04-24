@@ -26,7 +26,21 @@ public class DaoTest {
 
 
         UserDao userDao = new UserDao();
-        System.out.println("By id: " + userDao.findOne(1L));
+
+
+        System.out.println("Find all:");
+        userDao.findAll().forEach(System.out::println);
+
+
+        User user = userDao.findOne(1L);
+        System.out.println("By id: " + user);
+
+
+        User user1 = userDao.findOne(1L);
+        System.out.println("By id: " + user1);
+
+        System.out.println(user1 == user);
+
 //
 //        User user = new User();
 //        user.setId(123L);
@@ -37,8 +51,9 @@ public class DaoTest {
 //        role.setRoleName("kolpak vsemu");
 //        user.getRoles().add(role);
 //        userDao.save(user);
-        System.out.println("Find all:");
-        userDao.findAll().forEach(System.out::println);
+
+
+
 
         System.out.println("BY limit");
         userDao.findByLimit(0, 5).forEach(System.out::println);
