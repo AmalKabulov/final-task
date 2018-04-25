@@ -47,7 +47,7 @@ public class Tour implements BaseEntity{
     @ManyToMany(mappedBy = "tours", fetch = FetchType.EAGER)
     private List<City> cities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "tour")
     private List<Order> orders = new ArrayList<>();
 
 
