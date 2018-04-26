@@ -7,11 +7,12 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users_info")
-public class UserInfo implements BaseEntity{
+public class UserInfo implements BaseEntity {
 
     @Id
-    @Column(name = "id_user")
-    private Long idUser;
+    @OneToOne
+    @JoinColumn(name = "id_user")
+    private User user;
 
     @Column(name = "first_name")
     private String firstName;
@@ -40,13 +41,12 @@ public class UserInfo implements BaseEntity{
     public UserInfo() {
     }
 
-
-    public Long getIdUser() {
-        return idUser;
+    public User getUser() {
+        return user;
     }
 
-    public void setIdUser(Long idUser) {
-        this.idUser = idUser;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getFirstName() {
@@ -108,9 +108,9 @@ public class UserInfo implements BaseEntity{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof UserInfo)) return false;
         UserInfo userInfo = (UserInfo) o;
-        return Objects.equals(idUser, userInfo.idUser) &&
+        return Objects.equals(user, userInfo.user) &&
                 Objects.equals(firstName, userInfo.firstName) &&
                 Objects.equals(lastName, userInfo.lastName) &&
                 Objects.equals(dateOfBirth, userInfo.dateOfBirth) &&
@@ -123,13 +123,13 @@ public class UserInfo implements BaseEntity{
     @Override
     public int hashCode() {
 
-        return Objects.hash(idUser, firstName, lastName, dateOfBirth, country, city, phoneNumber, discount);
+        return Objects.hash(user, firstName, lastName, dateOfBirth, country, city, phoneNumber, discount);
     }
 
     @Override
     public String toString() {
         return "UserInfo{" +
-                "idUser=" + idUser +
+                "userId=" + user.getId() +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", dateOfBirth=" + dateOfBirth +

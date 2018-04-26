@@ -22,6 +22,8 @@ public class User implements BaseEntity{
     @Column(name = "password")
     private String password;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserInfo userInfo;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade = CascadeType.SAVE_UPDATE)
     private List<Role> roles = new ArrayList<>();
@@ -74,14 +76,23 @@ public class User implements BaseEntity{
         this.orders = orders;
     }
 
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof User)) return false;
         User user = (User) o;
         return Objects.equals(id, user.id) &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password) &&
+                Objects.equals(userInfo, user.userInfo) &&
                 Objects.equals(roles, user.roles) &&
                 Objects.equals(orders, user.orders);
     }
@@ -89,7 +100,7 @@ public class User implements BaseEntity{
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, email, password, roles, orders);
+        return Objects.hash(id, email, password, userInfo, roles, orders);
     }
 
     @Override
@@ -98,6 +109,7 @@ public class User implements BaseEntity{
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", userInfo=" + userInfo +
                 ", roles=" + roles +
                 ", orders=" + orders +
                 '}';

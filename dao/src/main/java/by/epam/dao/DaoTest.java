@@ -10,6 +10,7 @@ import com.ititon.jdbc_orm.processor.database.DefaultConnectionPool;
 import com.ititon.jdbc_orm.processor.exception.DefaultOrmException;
 
 import java.sql.SQLOutput;
+import java.util.*;
 
 
 public class DaoTest {
@@ -28,39 +29,34 @@ public class DaoTest {
         UserDao userDao = new UserDao();
 
 
-        System.out.println("Find all:");
-        userDao.findAll().forEach(System.out::println);
-
-
-        User user = userDao.findOne(1L);
-        System.out.println("By id: " + user);
-
-
-        User user1 = userDao.findOne(1L);
-        System.out.println("By id: " + user1);
-
-        System.out.println(user1 == user);
-
+//        System.out.println("Find all:");
+//        userDao.findAll().forEach(System.out::println);
 //
-//        User user = new User();
-//        user.setId(123L);
-//        user.setEmail("lalalalal@gmail.com");
-//        user.setPassword("asdasdas");
-//        Role role = new Role();
-//        role.setId(111L);
-//        role.setRoleName("kolpak vsemu");
-//        user.getRoles().add(role);
-//        userDao.save(user);
+//
+//        User user = userDao.findOne(1L);
+//        System.out.println("By id: " + user);
+//
+//
+//        User user1 = userDao.findOne(1L);
+//        System.out.println("By id: " + user1);
+
+//        System.out.println(user1 == user);
 
 
+        User user = new User();
+        user.setEmail("lalalalal@gmail.com");
+        user.setPassword("asdasdas");
+        Role role = new Role();
+        role.setRoleName("bla-vsemu");
+        user.getRoles().add(role);
+        userDao.save(user);
 
 
-        System.out.println("BY limit");
-        userDao.findByLimit(0, 5).forEach(System.out::println);
+//        System.out.println("BY limit");
+//        userDao.findByLimit(0, 5).forEach(System.out::println);
 //        while(true) {
 //
 //        }
-
 
 
 //        TourDao tourDao = new TourDao();
@@ -69,5 +65,9 @@ public class DaoTest {
 
         AirportDao airportDao = new AirportDao();
         System.out.println(airportDao.findOne(1L));
+
+
     }
+
+
 }
