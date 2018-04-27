@@ -9,16 +9,16 @@ import java.util.Objects;
 @Entity
 @Table(name = "cities")
 public class City implements BaseEntity{
+    private static final long serialVersionUID = -3276439926128412613L;
 
     @Id
     @Column(name = "id")
     private Long id;
 
-
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "country_id")
     private Country country;
 
@@ -28,6 +28,9 @@ public class City implements BaseEntity{
 
     @OneToMany(mappedBy = "city")
     private List<UserInfo> usersInfo = new ArrayList<>();
+
+    @OneToOne(mappedBy = "city")
+    private List<Hotel> hotels = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "tours_cities", joinColumns = {@JoinColumn(name = "id_city")},
@@ -86,23 +89,32 @@ public class City implements BaseEntity{
         this.tours = tours;
     }
 
+    public List<Hotel> getHotels() {
+        return hotels;
+    }
+
+    public void setHotels(List<Hotel> hotels) {
+        this.hotels = hotels;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof City)) return false;
         City city = (City) o;
         return Objects.equals(id, city.id) &&
                 Objects.equals(name, city.name) &&
                 Objects.equals(country, city.country) &&
                 Objects.equals(airports, city.airports) &&
                 Objects.equals(usersInfo, city.usersInfo) &&
+                Objects.equals(hotels, city.hotels) &&
                 Objects.equals(tours, city.tours);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, name, country, airports, usersInfo, tours);
+        return Objects.hash(id, name, country, airports, usersInfo, hotels, tours);
     }
 
     @Override
@@ -110,9 +122,10 @@ public class City implements BaseEntity{
         return "City{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", country=" + country +
+                ", country=" + country.getName() +
                 ", airports=" + airports +
                 ", usersInfo=" + usersInfo +
+                ", hotels=" + hotels +
                 ", tours=" + tours +
                 '}';
     }

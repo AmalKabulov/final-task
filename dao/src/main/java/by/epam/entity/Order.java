@@ -7,6 +7,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "orders")
 public class Order implements BaseEntity{
+    private static final long serialVersionUID = -3143004111991609692L;
+
 
     @Id
     @Column(name = "id")

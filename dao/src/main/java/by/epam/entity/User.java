@@ -11,6 +11,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 public class User implements BaseEntity{
+    private static final long serialVersionUID = 4762154135904653980L;
 
     @Column(name = "id")
     @Id

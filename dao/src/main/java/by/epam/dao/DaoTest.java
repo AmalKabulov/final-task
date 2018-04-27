@@ -1,6 +1,8 @@
 package by.epam.dao;
 
 import by.epam.DSProperties;
+import by.epam.dao.impl.RoleDao;
+import by.epam.dao.impl.UserDao;
 import by.epam.entity.Role;
 import by.epam.entity.User;
 import com.ititon.jdbc_orm.meta.EntityMeta;
@@ -8,9 +10,6 @@ import com.ititon.jdbc_orm.processor.CacheProcessor;
 import com.ititon.jdbc_orm.processor.database.DefaultConnectionPool;
 
 import com.ititon.jdbc_orm.processor.exception.DefaultOrmException;
-
-import java.sql.SQLOutput;
-import java.util.*;
 
 
 public class DaoTest {
@@ -20,21 +19,20 @@ public class DaoTest {
 
         CacheProcessor instance = CacheProcessor.getInstance();
         instance.initCache(10000, 5000, 10000);
-        EntityMeta meta = instance.getMeta(User.class);
-        System.out.println(meta);
         com.ititon.jdbc_orm.processor.database.DSProperties.init(DSProperties.URL, DSProperties.DRIVER, DSProperties.USERNAME, DSProperties.PASSWORD, DSProperties.MAX_POOL_SIZE);
-        DefaultConnectionPool.getInstance().init();
+        DefaultConnectionPool connectionPool = DefaultConnectionPool.getInstance();
+        connectionPool.init();
 
 
         UserDao userDao = new UserDao();
 
 
-//        System.out.println("Find all:");
-//        userDao.findAll().forEach(System.out::println);
+        System.out.println("Find all:");
+        userDao.findAll().forEach(System.out::println);
 //
 //
-//        User user = userDao.findOne(1L);
-//        System.out.println("By id: " + user);
+        User user1 = userDao.findOne(1L);
+        System.out.println("By id: " + user1);
 //
 //
 //        User user1 = userDao.findOne(1L);
@@ -46,10 +44,10 @@ public class DaoTest {
         Role role = roleDao.findOne(1L);
 
         User user = new User();
-        user.setEmail("lalala1231231lal@gmail.com");
-        user.setPassword("asdasdas");
+        user.setEmail("kabulov.amal@outlook.com");
+        user.setPassword("abcd123");
 //        Role role = new Role();
-//        role.setRoleName("bla-vsemu");
+//        role.setRoleName("admin");
         user.getRoles().add(role);
         userDao.save(user);
 
@@ -65,8 +63,10 @@ public class DaoTest {
 //        tourDao.findOne(1L);
 
 
-        AirportDao airportDao = new AirportDao();
-        System.out.println(airportDao.findOne(1L));
+//        AirportDao airportDao = new AirportDao();
+//        System.out.println(airportDao.findOne(1L));
+
+        connectionPool.destroy();
 
 
     }

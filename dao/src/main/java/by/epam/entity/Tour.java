@@ -10,6 +10,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "tours")
 public class Tour implements BaseEntity{
+    private static final long serialVersionUID = 8742069003723793750L;
 
     @Id
     @Column(name = "id")

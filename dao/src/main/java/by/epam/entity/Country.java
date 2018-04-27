@@ -9,6 +9,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "countries")
 public class Country implements BaseEntity{
+    private static final long serialVersionUID = -1656230159759973881L;
 
     @Id
     @Column(name = "id")

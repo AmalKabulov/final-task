@@ -9,6 +9,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "tour_types")
 public class TourType implements BaseEntity{
+    private static final long serialVersionUID = 7010391686243188294L;
+
     @Id
     @Column(name = "id")
     private Long id;

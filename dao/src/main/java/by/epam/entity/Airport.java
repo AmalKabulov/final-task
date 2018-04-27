@@ -9,6 +9,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "airports")
 public class Airport implements BaseEntity{
+    private static final long serialVersionUID = -2634523175765308159L;
 
     @Id
     @Column(name = "id")
@@ -17,7 +18,7 @@ public class Airport implements BaseEntity{
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "city_id")
     private City city;
 

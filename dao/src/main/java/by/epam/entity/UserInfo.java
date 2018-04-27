@@ -8,6 +8,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "users_info")
 public class UserInfo implements BaseEntity {
+    private static final long serialVersionUID = 4944493895044853994L;
 
     @Id
     @OneToOne
