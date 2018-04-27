@@ -42,12 +42,14 @@ public class DaoTest {
 
 //        System.out.println(user1 == user);
 
+        RoleDao roleDao = new RoleDao();
+        Role role = roleDao.findOne(1L);
 
         User user = new User();
-        user.setEmail("lalalalal@gmail.com");
+        user.setEmail("lalala1231231lal@gmail.com");
         user.setPassword("asdasdas");
-        Role role = new Role();
-        role.setRoleName("bla-vsemu");
+//        Role role = new Role();
+//        role.setRoleName("bla-vsemu");
         user.getRoles().add(role);
         userDao.save(user);
 
