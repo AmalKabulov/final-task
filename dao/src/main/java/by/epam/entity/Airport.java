@@ -87,7 +87,7 @@ public class Airport implements BaseEntity{
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, name, city, toursForArrival, toursForDeparture);
+        return Objects.hash(id, name, city.getId(), toursForArrival, toursForDeparture);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class Airport implements BaseEntity{
         return "Airport{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", city=" + city +
+                ", city=" + city.getName() +
                 ", toursForArrival=" + toursForArrival +
                 ", toursForDeparture=" + toursForDeparture +
                 '}';

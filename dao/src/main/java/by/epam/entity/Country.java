@@ -23,7 +23,7 @@ public class Country implements BaseEntity{
     @Column(name = "phone_code")
     private String phoneCode;
 
-    @OneToMany(mappedBy = "country")
+    @OneToMany(mappedBy = "country", fetch = FetchType.EAGER)
     private List<City> cities = new ArrayList<>();
 
     @OneToMany(mappedBy = "country")

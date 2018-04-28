@@ -114,7 +114,7 @@ public class City implements BaseEntity{
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, name, country, airports, usersInfo, hotels, tours);
+        return Objects.hash(id, name, country.getId(), airports, usersInfo, hotels, tours);
     }
 
     @Override
