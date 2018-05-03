@@ -22,14 +22,13 @@ public class City implements BaseEntity{
     @JoinColumn(name = "country_id")
     private Country country;
 
-
     @OneToMany(mappedBy = "city")
     private List<Airport> airports = new ArrayList<>();
 
     @OneToMany(mappedBy = "city")
     private List<UserInfo> usersInfo = new ArrayList<>();
 
-    @OneToOne(mappedBy = "city")
+    @OneToMany(mappedBy = "city")
     private List<Hotel> hotels = new ArrayList<>();
 
     @ManyToMany

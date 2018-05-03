@@ -26,10 +26,12 @@ public class AirportDaoTestTest extends BaseDaoTest {
 //        country.setPhoneCode("+7");
 
         Country country = countryDao.findOne(1L);
+
         City city = country.getCities().get(0);
-        city.setName("Moscow1");
+        city.setName("Istanbul");
 
         cityDao.update(city);
+        System.out.println(country);
 //        City city = new City();
 //        city.setCountry(country);
 //        city.setName("Moscow");

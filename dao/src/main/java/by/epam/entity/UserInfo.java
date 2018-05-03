@@ -36,7 +36,7 @@ public class UserInfo implements BaseEntity {
     private String phoneNumber;
 
     @Column(name = "discount")
-    private Integer discount;
+    private int discount;
 
 
     public UserInfo() {
@@ -98,11 +98,11 @@ public class UserInfo implements BaseEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    public Integer getDiscount() {
+    public int getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Integer discount) {
+    public void setDiscount(int discount) {
         this.discount = discount;
     }
 

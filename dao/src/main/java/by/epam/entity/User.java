@@ -26,11 +26,13 @@ public class User implements BaseEntity{
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserInfo userInfo;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade = CascadeType.SAVE_UPDATE)
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Role> roles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Order> orders = new ArrayList<>();
+
+    private Integer isActive;
 
 
     public User() {
@@ -85,6 +87,14 @@ public class User implements BaseEntity{
         this.userInfo = userInfo;
     }
 
+    public Integer getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Integer isActive) {
+        this.isActive = isActive;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -95,13 +105,14 @@ public class User implements BaseEntity{
                 Objects.equals(password, user.password) &&
                 Objects.equals(userInfo, user.userInfo) &&
                 Objects.equals(roles, user.roles) &&
-                Objects.equals(orders, user.orders);
+                Objects.equals(orders, user.orders) &&
+                Objects.equals(isActive, user.isActive);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, email, password, userInfo, roles, orders);
+        return Objects.hash(id, email, password, userInfo, roles, orders, isActive);
     }
 
     @Override
@@ -113,6 +124,6 @@ public class User implements BaseEntity{
                 ", userInfo=" + userInfo +
                 ", roles=" + roles +
                 ", orders=" + orders +
-                '}';
+                ", isActive= " + isActive +"}";
     }
 }
