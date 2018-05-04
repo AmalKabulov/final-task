@@ -3,14 +3,10 @@ package by.epam.dao;
 import by.epam.dao.impl.AirportDao;
 import by.epam.dao.impl.CityDao;
 import by.epam.dao.impl.CountryDao;
-import by.epam.entity.Airport;
 import by.epam.entity.City;
 import by.epam.entity.Country;
 import com.ititon.jdbc_orm.processor.exception.DefaultOrmException;
 import org.junit.Test;
-
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
 
 public class AirportDaoTestTest extends BaseDaoTest {
     private DaoFactory daoFactory = DaoFactory.getInstance();

@@ -102,7 +102,7 @@ public class UserInfo implements BaseEntity {
         return discount;
     }
 
-    public void setDiscount(int discount) {
+    public void setDiscount(Integer discount) {
         this.discount = discount;
     }
 

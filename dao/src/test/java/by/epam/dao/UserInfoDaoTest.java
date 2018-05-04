@@ -10,8 +10,9 @@ import com.ititon.jdbc_orm.processor.exception.DefaultOrmException;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import static org.junit.Assert.assertThat;
+
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertThat;
 
 public class UserInfoDaoTest extends BaseDaoTest{
     private DaoFactory daoFactory = DaoFactory.getInstance();
@@ -36,5 +37,34 @@ public class UserInfoDaoTest extends BaseDaoTest{
         assertThat(userInfo, equalTo(saveduserInfo));
 
 
+    }
+
+
+    @Test
+    public void updateUserInfo() throws DefaultOrmException {
+        User user = userDao.findOne(1L);
+        Country country = countryDao.findOne(1L);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUser(user);
+        userInfo.setCountry(country);
+        userInfo.setCity(country.getCities().get(0));
+        userInfo.setPhoneNumber("+1234");
+        userInfo.setFirstName("alex");
+        userInfo.setLastName("alexov");
+        userInfo.setDateOfBirth(LocalDate.now());
+
+        UserInfo saveduserInfo = userInfoDao.update(userInfo);
+        assertThat(userInfo, equalTo(saveduserInfo));
+    }
+
+
+    @Test
+    public void findUserById() throws DefaultOrmException {
+//        User user = userDao.findOne(1L);
+//        System.out.println("USER IS " + user);
+        User user = new User();
+        user.setId(1L);
+        UserInfo userInfo = userInfoDao.findOne(user);
+        assertThat(user, equalTo(userInfo.getUser()));
     }
 }

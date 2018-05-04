@@ -27,8 +27,8 @@ public class DaoDirector {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends BaseDao> T getDao(final Class<? extends BaseDao> daoClass) {
-        return (T) daoMap.get(daoClass);
+    public <D extends BaseDao> D getDao(final Class<D> daoClass) {
+        return (D) daoMap.get(daoClass);
     }
 
     public static DaoDirector getInstance() {

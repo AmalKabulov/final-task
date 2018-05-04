@@ -1,14 +1,5 @@
 package by.epam.dao;
 
-import by.epam.DSProperties;
-import by.epam.dao.impl.RoleDao;
-import by.epam.dao.impl.UserDao;
-import by.epam.entity.Role;
-import by.epam.entity.User;
-import com.ititon.jdbc_orm.meta.EntityMeta;
-import com.ititon.jdbc_orm.processor.CacheProcessor;
-import com.ititon.jdbc_orm.processor.database.DefaultConnectionPool;
-
 import com.ititon.jdbc_orm.processor.exception.DefaultOrmException;
 
 

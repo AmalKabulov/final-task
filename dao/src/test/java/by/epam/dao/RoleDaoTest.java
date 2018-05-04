@@ -5,8 +5,8 @@ import by.epam.entity.Role;
 import com.ititon.jdbc_orm.processor.exception.DefaultOrmException;
 import org.junit.Test;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertThat;
 
 public class RoleDaoTest extends BaseDaoTest{
     private DaoFactory daoFactory = DaoFactory.getInstance();

@@ -1,7 +1,5 @@
 package by.epam.dao;
 
-import by.epam.dao.impl.AirportDao;
-
 public class DaoFactory {
     private static final DaoFactory INSTANCE = new DaoFactory();
     private final DaoDirector daoDirector = DaoDirector.getInstance();
@@ -9,7 +7,7 @@ public class DaoFactory {
     private DaoFactory() {
     }
 
-    public <T extends BaseDao> T getDao(final Class<T> daoClass) {
+    public <D extends BaseDao> D getDao(final Class<D> daoClass) {
         return daoDirector.getDao(daoClass);
     }
 

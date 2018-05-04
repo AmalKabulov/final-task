@@ -1,6 +1,5 @@
 package by.epam.service;
 
-import by.epam.dao.BaseDao;
 import by.epam.entity.BaseEntity;
 import com.ititon.jdbc_orm.processor.exception.DefaultOrmException;
 

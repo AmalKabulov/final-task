@@ -7,8 +7,8 @@ import by.epam.entity.User;
 import com.ititon.jdbc_orm.processor.exception.DefaultOrmException;
 import org.junit.Test;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertThat;
 
 public class UserDaoTest extends BaseDaoTest{
     private DaoFactory daoFactory = DaoFactory.getInstance();
